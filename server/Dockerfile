@@ -7,7 +7,7 @@ ADD . $GOPATH/src/build/
 
 WORKDIR $GOPATH/src/build/
 
-RUN go get ./...
+RUN go mod download
 
 EXPOSE 8081
 
