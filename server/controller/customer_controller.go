@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 
@@ -43,6 +44,20 @@ func GetAllCustomers(c *gin.Context){
 	}
 
 	c.JSON(http.StatusOK, gin.H{"success": true, "customers": customers})
+}
+
+func GetCustomerById(c *gin.Context){
+	customer := db.Customer{}
+	row := db.DB.QueryRow(db.GetCustomerByIdQuery, c.Param("id"))
+
+	err := row.Scan(&customer.Id, &customer.Name, &customer.Email, &customer.Telephone, &customer.CreatedAt, &customer.UpdatedAt)
+	if err == sql.ErrNoRows {
+		fmt.Println(sql.ErrNoRows, "err")
+		c.JSON(http.StatusNotFound, gin.H{"success": false, "msg": "invalid customer id"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "customers": customer})
 }
 
 
