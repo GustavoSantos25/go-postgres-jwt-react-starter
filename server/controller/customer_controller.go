@@ -60,6 +60,20 @@ func GetCustomerById(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{"success": true, "customers": customer})
 }
 
+func GetCustomerPaymentMethods(c *gin.Context){
+	pms := []db.PaymentMethod{}
+	rows, _ := db.DB.Query(db.GetCustomerPaymentMethodsQuery, c.Param("id"))
+	
+	for rows.Next(){
+		pm := db.PaymentMethod{}
+
+		err := rows.Scan(&pm.Id, &pm.MethodType, &pm.SuccessfulRegistration, &pm.CustomerId, &pm.CreatedAt, &pm.UpdatedAt)
+		errors.HandleErr(c, err)
+		pms = append(pms, pm)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "paymentmethods": pms})
+}
 
 func checkCustomerExists(customer db.Customer) bool {
 	rows, err := db.DB.Query(db.CheckCustomerExists, customer.Id)

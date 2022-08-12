@@ -11,4 +11,5 @@ const (
 	CreatePaymentMethodsQuery = `INSERT INTO paymentmethods(id, method_type, successful_registration, customer_id) VALUES ($1, $2 , $3, $4)`
 	GetAllPaymentMethodsQuery = `SELECT * FROM paymentmethods`
 	GetPaymentMethodByIdQuery = `SELECT * FROM paymentmethods WHERE id = $1`
+	GetCustomerPaymentMethodsQuery = `SELECT * FROM paymentmethods WHERE customer_id = $1`
 )
