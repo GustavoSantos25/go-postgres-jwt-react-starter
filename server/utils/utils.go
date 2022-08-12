@@ -42,3 +42,19 @@ func ValidateCustomer(customer db.Customer, err []string) []string {
 
 	return err
 }
+
+func ValidatePaymentMehtod(pm db.PaymentMethod, err []string) []string {
+	if !containsString([]string{"card", "debit", "paypal"}, pm.MethodType) {
+		err = append(err, "Invalid method type")
+	}
+	return err
+}
+
+func containsString(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+	return false
+}

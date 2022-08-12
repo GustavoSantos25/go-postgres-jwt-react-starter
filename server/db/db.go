@@ -26,4 +26,6 @@ func Connect() {
 	CreateUsersTable()
 	// Create "customers" table if it doesnt exist
 	CreateCustomersTable()
+	// Create "paymentmethods" table if it doesnt exist
+	CreatePaymentMethodsTable()
 }
