@@ -1,0 +1,44 @@
+package controller
+
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/rogaha/go-postgres-jwt-react-starter/server/db"
+	"github.com/rogaha/go-postgres-jwt-react-starter/server/errors"
+	"github.com/rogaha/go-postgres-jwt-react-starter/server/utils"
+
+	"github.com/gin-gonic/gin"
+)
+
+func CreateCustomer(c *gin.Context){
+	var customer db.Customer
+	c.Bind(&customer)
+	exists := checkCustomerExists(customer)
+
+	valErr := utils.ValidateCustomer(customer, errors.ValidationErrors)
+	if exists == true {
+		valErr = append(valErr, "email already exists")
+	}
+	fmt.Println(valErr)
+	if len(valErr) > 0 {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"success": false, "errors": valErr})
+		return
+	}
+	_, err := db.DB.Query(db.CreateCustomerQuery, customer.Id, customer.Name, customer.Email, customer.Telephone)
+	errors.HandleErr(c, err)
+	c.JSON(http.StatusOK, gin.H{"success": true, "msg": "Customer created succesfully"})
+}
+
+
+func checkCustomerExists(customer db.Customer) bool {
+	rows, err := db.DB.Query(db.CheckCustomerExists, customer.Id)
+	if err != nil {
+		return false
+	}
+	if !rows.Next() {
+		return false
+	}
+	return true
+}
+

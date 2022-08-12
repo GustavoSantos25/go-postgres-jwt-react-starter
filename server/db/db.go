@@ -24,4 +24,6 @@ func Connect() {
 	DB = db
 	// Create "users" table if it doesnt exist
 	CreateUsersTable()
+	// Create "customers" table if it doesnt exist
+	CreateCustomersTable()
 }
