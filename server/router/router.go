@@ -21,5 +21,6 @@ func SetupRouter() *gin.Engine {
 	router.POST("/login", controller.Login)
 	router.GET("/session", controller.Session)
 	router.POST("/customers", controller.CreateCustomer)
+	router.GET("/customers", controller.GetAllCustomers)
 	return router
 }

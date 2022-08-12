@@ -30,6 +30,21 @@ func CreateCustomer(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{"success": true, "msg": "Customer created succesfully"})
 }
 
+func GetAllCustomers(c *gin.Context){
+	customers := []db.Customer{}
+	rows, _ := db.DB.Query(db.GetAllCustomersQuery)
+	
+	for rows.Next(){
+		customer := db.Customer{}
+
+		err := rows.Scan(&customer.Id, &customer.Name, &customer.Email, &customer.Telephone, &customer.CreatedAt, &customer.UpdatedAt)
+		errors.HandleErr(c, err)
+		customers = append(customers, customer)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "customers": customers})
+}
+
 
 func checkCustomerExists(customer db.Customer) bool {
 	rows, err := db.DB.Query(db.CheckCustomerExists, customer.Id)
