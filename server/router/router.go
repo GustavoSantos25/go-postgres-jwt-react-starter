@@ -23,6 +23,7 @@ func SetupRouter() *gin.Engine {
 	router.POST("/customers", controller.CreateCustomer)
 	router.GET("/customers", controller.GetAllCustomers)
 	router.GET("/customers/:id/paymentmethods", controller.GetCustomerPaymentMethods)
+	router.GET("/customers/:id/paymentmethods/count", controller.GetCustomerPaymentMethodsCount)
 	router.GET("/customers/:id", controller.GetCustomerById)
 	router.POST("/paymentmethods", controller.CreatePaymentMethod)
 	router.GET("/paymentmethods", controller.GetAllPaymentMethods)

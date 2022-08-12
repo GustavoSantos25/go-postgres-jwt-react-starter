@@ -75,6 +75,20 @@ func GetCustomerPaymentMethods(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{"success": true, "paymentmethods": pms})
 }
 
+func GetCustomerPaymentMethodsCount(c *gin.Context){
+	var count int
+	row := db.DB.QueryRow(db.GetCustomerPaymentMethodsCountQuery, c.Param("id"))
+
+	err := row.Scan(&count)
+	if err == sql.ErrNoRows {
+		fmt.Println(sql.ErrNoRows, "err")
+		c.JSON(http.StatusNotFound, gin.H{"success": false, "msg": "invalid customer id"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "paymentmethods_count": count})
+}
+
 func checkCustomerExists(customer db.Customer) bool {
 	rows, err := db.DB.Query(db.CheckCustomerExists, customer.Id)
 	if err != nil {

@@ -12,4 +12,5 @@ const (
 	GetAllPaymentMethodsQuery = `SELECT * FROM paymentmethods`
 	GetPaymentMethodByIdQuery = `SELECT * FROM paymentmethods WHERE id = $1`
 	GetCustomerPaymentMethodsQuery = `SELECT * FROM paymentmethods WHERE customer_id = $1`
+	GetCustomerPaymentMethodsCountQuery = `SELECT COUNT(*) FROM paymentmethods WHERE customer_id = $1`
 )
