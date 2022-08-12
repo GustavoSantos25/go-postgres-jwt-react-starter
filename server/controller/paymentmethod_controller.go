@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"database/sql"
 
 	"github.com/rogaha/go-postgres-jwt-react-starter/server/db"
 	"github.com/rogaha/go-postgres-jwt-react-starter/server/errors"
@@ -43,6 +44,20 @@ func GetAllPaymentMethods(c *gin.Context){
 	}
 
 	c.JSON(http.StatusOK, gin.H{"success": true, "paymentmethods": pms})
+}
+
+func GetPaymentMethodById(c *gin.Context){
+	pm := db.PaymentMethod{}
+	row := db.DB.QueryRow(db.GetPaymentMethodByIdQuery, c.Param("id"))
+
+	err := row.Scan(&pm.Id, &pm.MethodType, &pm.SuccessfulRegistration, &pm.CustomerId, &pm.CreatedAt, &pm.UpdatedAt)
+	if err == sql.ErrNoRows {
+		fmt.Println(sql.ErrNoRows, "err")
+		c.JSON(http.StatusNotFound, gin.H{"success": false, "msg": "invalid paymentmethod id"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "paymentmethod": pm})
 }
 
 func checkCustomerIdExists(customerId string) bool {
