@@ -9,4 +9,5 @@ const (
 	GetAllCustomersQuery = `SELECT * FROM customers`
 	GetCustomerByIdQuery = `SELECT * FROM customers WHERE id = $1`
 	CreatePaymentMethodsQuery = `INSERT INTO paymentmethods(id, method_type, successful_registration, customer_id) VALUES ($1, $2 , $3, $4)`
+	GetAllPaymentMethodsQuery = `SELECT * FROM paymentmethods`
 )

@@ -30,6 +30,20 @@ func CreatePaymentMethod(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{"success": true, "msg": "Payment Method created succesfully"})
 }
 
+func GetAllPaymentMethods(c *gin.Context){
+	pms := []db.PaymentMethod{}
+	rows, _ := db.DB.Query(db.GetAllPaymentMethodsQuery)
+	
+	for rows.Next(){
+		pm := db.PaymentMethod{}
+
+		err := rows.Scan(&pm.Id, &pm.MethodType, &pm.SuccessfulRegistration, &pm.CustomerId, &pm.CreatedAt, &pm.UpdatedAt)
+		errors.HandleErr(c, err)
+		pms = append(pms, pm)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "paymentmethods": pms})
+}
 
 func checkCustomerIdExists(customerId string) bool {
 	rows, err := db.DB.Query(db.CheckCustomerExists, customerId)
